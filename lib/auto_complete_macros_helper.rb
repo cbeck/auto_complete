@@ -102,13 +102,25 @@ module AutoCompleteMacrosHelper
   # Wrapper for text_field with added AJAX autocompletion functionality.
   #
   # In your controller, you'll need to define an action called
-  # auto_complete_for to respond the AJAX calls,
+  # auto_complete_for to respond the AJAX calls, or pass in the
+  # tag option :controller => "some_controller" if you are calling
+  # a different controller's auto_complete_for action.
+  #
+  # An example of why you would want to pass in the controller is if
+  # you have a search controller that is called from many places in 
+  # your site. As long as you have a method such as auto_complete_for_search_query
+  # in your search controller, you can call this method from anywhere like this:
+  #
+  # text_field_with_auto_complete :search, :query, :controller => "search" 
+  # 
+  # If you do not pass in the :controller option, the current controller is assumed.
   # 
   def text_field_with_auto_complete(object, method, tag_options = {}, completion_options = {})
+    my_controller = tag_options[:controller] || controller
     (completion_options[:skip_style] ? "" : auto_complete_stylesheet) +
     text_field(object, method, tag_options) +
     content_tag("div", "", :id => "#{object}_#{method}_auto_complete", :class => "auto_complete") +
-    auto_complete_field("#{object}_#{method}", { :url => { :action => "auto_complete_for_#{object}_#{method}" } }.update(completion_options))
+    auto_complete_field("#{object}_#{method}", { :url => { :action => "auto_complete_for_#{object}_#{method}", :controller => my_controller } }.update(completion_options))
   end
 
   private

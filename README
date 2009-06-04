@@ -15,9 +15,36 @@ auto_complete_for takes a third parameter, an options hash to
 the find method used to search for the records:
 
   auto_complete_for :post, :title, :limit => 15, :order => 'created_at DESC'
+  
+Included in the plugin is the text_field_with_auto_complete helper macro.
+This makes using this plugin a snap. 
+
+In your controller, you'll need to define an action called
+auto_complete_for to respond the AJAX calls, or pass in the
+tag option :controller => "some_controller" if you are calling
+a different controller's auto_complete_for action.
+
+An example of why you would want to pass in the controller is if
+you have a search controller that is called from many places in 
+your site. As long as you have a method such as auto_complete_for_search_query
+in your search controller, you can call this method from anywhere like this:
+
+text_field_with_auto_complete :search, :query, :controller => "search" 
+
+If you do not pass in the :controller option, the current controller is assumed.
+For instance, if you happened to be on a page served by the search controller, 
+you can simply call the following, given our previous example:
+
+text_field_with_auto_complete :search, :query
+
+There are many other useful methods, so be sure to check out the comments in the
+source.
 
 For more examples, see script.aculo.us:
 * http://script.aculo.us/demos/ajax/autocompleter
 * http://script.aculo.us/demos/ajax/autocompleter_customized
 
-Copyright (c) 2007 David Heinemeier Hansson, released under the MIT license   
+Copyright (c) 2007 David Heinemeier Hansson, released under the MIT license 
+
+Additional functionality and comments Copyright (c) 2009, Chris Beck  
+Released under the MIT license
