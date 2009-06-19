@@ -1,4 +1,7 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../../test/test_helper')) 
+require File.expand_path(File.join(File.dirname(__FILE__), '../../../../test/test_helper'))
+
+# require File.expand_path(File.dirname(__FILE__) + "/../lib/auto_complete")
+# require File.expand_path(File.dirname(__FILE__) + "/../lib/auto_complete_macros_helper")
 
 class AutoCompleteTest < Test::Unit::TestCase
   include AutoComplete
@@ -19,6 +22,8 @@ class AutoCompleteTest < Test::Unit::TestCase
       end
     end
     @controller = @controller.new
+    
+    puts "setup"
   end
 
 
@@ -42,6 +47,8 @@ class AutoCompleteTest < Test::Unit::TestCase
       auto_complete_field("some_input", :url => { :action => "autocomplete" }, :param_name => 'huidriwusch');
     assert_dom_equal %(<script type=\"text/javascript\">\n//<![CDATA[\nvar some_input_auto_completer = new Ajax.Autocompleter('some_input', 'some_input_auto_complete', 'http://www.example.com/autocomplete', {method:'get'})\n//]]>\n</script>),
       auto_complete_field("some_input", :url => { :action => "autocomplete" }, :method => :get);
+    
+    puts "first one done"
   end
   
   def test_auto_complete_result
@@ -62,6 +69,9 @@ class AutoCompleteTest < Test::Unit::TestCase
 
     assert_dom_equal %(<input id=\"message_recipient\" name=\"message[recipient]\" size=\"30\" type=\"text\" /><div class=\"auto_complete\" id=\"message_recipient_auto_complete\"></div><script type=\"text/javascript\">\n//<![CDATA[\nvar message_recipient_auto_completer = new Ajax.Autocompleter('message_recipient', 'message_recipient_auto_complete', 'http://www.example.com/auto_complete_for_message_recipient', {})\n//]]>\n</script>),
       text_field_with_auto_complete(:message, :recipient, {}, :skip_style => true)
+      
+    assert_dom_equal %(<input id=\"message_recipient\" name=\"message[recipient]\" size=\"30\" type=\"text\" /><div class=\"auto_complete\" id=\"message_recipient_auto_complete\"></div><script type=\"text/javascript\">\n//<![CDATA[\nvar message_recipient_auto_completer = new Ajax.Autocompleter('message_recipient', 'message_recipient_auto_complete', 'http://www.example.com/search/auto_complete_for_message_recipient', {})\n//]]>\n</script>),
+      text_field_with_auto_complete(:message, :recipient, {:controller => "search"}, :skip_style => true)
   end
   
 end
