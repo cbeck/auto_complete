@@ -116,11 +116,12 @@ module AutoCompleteMacrosHelper
   # If you do not pass in the :controller option, the current controller is assumed.
   # 
   def text_field_with_auto_complete(object, method, tag_options = {}, completion_options = {})
-    my_controller = tag_options[:controller] || controller
+    target_controller = tag_options[:controller] || @controller.controller_name
+    
     (completion_options[:skip_style] ? "" : auto_complete_stylesheet) +
     text_field(object, method, tag_options) +
     content_tag("div", "", :id => "#{object}_#{method}_auto_complete", :class => "auto_complete") +
-    auto_complete_field("#{object}_#{method}", { :url => { :action => "auto_complete_for_#{object}_#{method}", :controller => my_controller } }.update(completion_options))
+    auto_complete_field("#{object}_#{method}", { :url => { :action => "auto_complete_for_#{object}_#{method}", :controller => target_controller } }.update(completion_options))
   end
 
   private
